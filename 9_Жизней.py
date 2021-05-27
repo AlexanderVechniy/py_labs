@@ -2,6 +2,8 @@ word = list("бегемот")
 guess_word = list("???????")
 difficulty = 10
 
+already_guessed = False
+
 # Легкая сложность = 9 жизней
 def ChooseDifficulty():
 	print("Выберите сложность (1, 2 или 3):")
@@ -22,10 +24,14 @@ def PrintMsg():
 def ChangeLtr(l):
 	global word
 	global guess_word
-
+	global already_guessed
 	is_changed = False
 
 	for i in range(len(word)):
+		if l == guess_word[i]:
+			already_guessed = True
+			is_changed = True
+			break
 		if l == word[i]:
 			guess_word[i] = l
 			is_changed = True
@@ -36,11 +42,13 @@ def GuessLtr():
 	l = input()
 
 	global difficulty
+	global already_guessed
 	if ChangeLtr(l):
 		x = len(guess_word) - guess_word.count('?')
 		print("Угадано " + str(x) + " букв. Осталось угадать " + str( len(guess_word)-x ) + " букв")
-		if guess_word.count(l) > 0:
+		if already_guessed:
 			print("Такая буква уже есть")
+			already_guessed = False
 	else:
 		print("Такой буквы здесь нет =( Попробуйте еще раз")
 		difficulty -= 1
