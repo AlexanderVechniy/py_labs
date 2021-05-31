@@ -85,4 +85,5 @@ def TheGame():
 		GuessLtr()
 	ResetGame()
 
-TheGame()
+if __name__=='__main__':
+	TheGame()
