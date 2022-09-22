@@ -1,23 +1,28 @@
-t_p = 0.22+0.06*0.18+0.18*0.11*0.11+0.21 # 0.442978
-print("Теор. вер. выхода из строя системы =", t_p)
-
-from random import uniform
-
 def Experiment(N):
-	d = [[], [], [], [], [], []]
-	d_p = [0.22, 0.06, 0.18, 0.11, 0.11, 0.21]
-	not_working_counter = 0
+    from random import uniform
+    p_b = [0.22, 0.06, 0.18, 0.11, 0.11, 0.21] # Вероятности выхода из строя приборов
+    fail_ctr = 0    # Счётчик выходов из строя системы
+    for n in range(N):
+        t = [uniform(0, 1) for i in range(6)]
+        # Проверка 1 прибора
+        if t[0] < p_b[0]:
+            fail_ctr += 1
+            continue
+        # Проверка 6 прибора
+        if t[5] < p_b[5]:
+            fail_ctr += 1
+            continue     
+        # Проверка 2 и 3 прибора       
+        if (t[1] < p_b[1]) and (t[2] <= p_b[2]):
+            fail_ctr += 1
+            continue
+        # Проверка 3, 4 и 5 приборов
+        if (t[2] < p_b[2]) and (t[3] <= p_b[3]) and (t[4] <= p_b[4]):
+            fail_ctr += 1
+    print ("Вероятность выхода из строя для", N, "экспериментов:", fail_ctr / N)
 
-	for i in range (N):
-		for j in range (6):
-			t = round(uniform(0, 1), 2)
-			d[j].append([t, t <= d_p[j]])
-		if d[0][i][1] or d[1][i][1] and d[2][i][1] or d[2][i][1] and d[3][i][1] and d[4][i][1] or d[5][i][1]:
-			not_working_counter += 1
 
-	return not_working_counter/N
-
-print ("Вероятность выхода из строя для 10 экспериментов:", Experiment(10))
-print ("Вероятность выхода из строя для 100 экспериментов:", Experiment(100))
-print ("Вероятность выхода из строя для 500 экспериментов:", Experiment(500))
-print ("Вероятность выхода из строя для 1000 экспериментов:", Experiment(1000))
+Experiment(10)
+Experiment(100)
+Experiment(500)
+Experiment(1000)
